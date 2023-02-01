@@ -2,7 +2,7 @@ const Env = {
   test: 'test',
   dev: 'development',
   prod: 'production'
-}
+};
 
 const AppEnv = process.env.NODE_ENV || Env.dev;
 const IsTestEnv = AppEnv === Env.test;
@@ -15,4 +15,4 @@ module.exports = {
   IsDevEnv,
   IsProdEnv,
   IsTestEnv,
-}
+};

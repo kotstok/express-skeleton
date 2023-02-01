@@ -1,11 +1,9 @@
-const crypto = require('crypto');
-const argon = require('argon2');
-
 const User = require('#models/user.model');
 const BadRequest = require('#app/errors/bad-request.error');
 const { SignToken } = require('#app/utils/jwt');
-const { HashPasswd,
-  VerifyPasswd
+const {
+  HashPasswd,
+  VerifyPasswd,
 } = require('../utils/passwd');
 
 async function Signup(data) {
@@ -29,12 +27,12 @@ async function Auth(email, passwd) {
   });
 
   if (!user) {
-    throw new BadRequest('Incorrect passwd or user does not exist')
+    throw new BadRequest('Incorrect passwd or user does not exist');
   }
 
   const isValidPasswd = await VerifyPasswd(user.passwd, passwd);
   if (!isValidPasswd) {
-    throw new BadRequest('Incorrect passwd or user does not exist')
+    throw new BadRequest('Incorrect passwd or user does not exist');
   }
 
   delete user.dataValues.passwd;
@@ -44,10 +42,10 @@ async function Auth(email, passwd) {
     email: user.email,
   });
 
-  return [token, user];
+  return [ token, user ];
 }
 
 module.exports = {
   Signup,
-  Auth
+  Auth,
 };
