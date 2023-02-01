@@ -1,20 +1,8 @@
-const { DataTypes, Model } = require('sequelize');
+const { DataTypes } = require('sequelize');
 const sequelize = require('../src/utils/database');
 const User = require('./user.model');
 
-class Post extends Model {
-  id;
-  title;
-  body;
-  published;
-  authorId;
-  createdAt;
-  updatedAt;
-
-  otherPublicField;
-}
-
-Post.init ({
+const Post = sequelize.define('Post', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,// this field does not shadow anything. It is fine.

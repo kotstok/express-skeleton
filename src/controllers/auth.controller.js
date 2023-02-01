@@ -1,34 +1,36 @@
 const HttpStatus = require('http-status-codes');
+const { matchedData } = require('express-validator');
 
-const User = require('../../models/user.model');
-const {
-  UniqueConstraintError,
-  ValidationError,
-} = require('sequelize');
+const { Signup, Auth } = require('#app/services/auth.service');
 
 class AuthController {
-  async signIn(req, res) {
+  async signIn(req, res, next) {
+    try {
+      const [token, user] = await Auth(req.body.email, req.body.passwd);
 
-    res.json({
-      test: 1,
-    });
+      res.json({
+        user: user,
+        token: token,
+      });
+    } catch (e) {
+      next(e);
+    }
   }
 
   async signUp(req, res, next) {
+    const data = matchedData(req, {
+      includeOptionals: true,
+      locations: [ 'body' ],
+    });
+
     try {
-      const user = await User.create({
-        name: req.body.name,
-        email: req.body.email,
-        passwd: req.body.passwd,
-        updatedAt: null,
-      });
+      const user = await Signup(data);
 
-      delete user.passwd;
-
-      res.status(HttpStatus.CREATED).json(user);
+      res.status(HttpStatus.CREATED)
+        .json(user);
 
     } catch (err) {
-      next(err)
+      next(err);
     }
   }
 }

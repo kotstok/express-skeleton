@@ -1,21 +1,7 @@
-const {
-  DataTypes,
-  Model,
-} = require('sequelize');
+const { DataTypes } = require('sequelize');
 const sequelize = require('../src/utils/database');
 
-class User extends Model {
-  id;
-  name;
-  email;
-  passwd;
-  isActive;
-  createdAt;
-  updatedAt;
-  otherPublicField;
-}
-
-User.init({
+const User = sequelize.define('User', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,

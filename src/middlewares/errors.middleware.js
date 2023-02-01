@@ -1,10 +1,25 @@
 const {
   ValidationError,
-  UniqueConstraintError
+  UniqueConstraintError,
 } = require('sequelize');
+const logger = require('#app/utils/logger');
 const HttpStatus = require('http-status-codes');
+const BaseError = require('#app/errors/base.error');
 
 const errorHandler = (err, req, res, next) => {
+  if (!err) {
+    next(req, res, next);
+    return;
+  }
+
+  if (err instanceof BaseError) {
+    res.status(err.statusCode)
+      .json({ message: err.message });
+
+    return;
+  }
+
+  logger.error(err.message);
 
   if (err instanceof ValidationError) {
     res.status(HttpStatus.UNPROCESSABLE_ENTITY)

@@ -2,7 +2,7 @@ const {
   StatusCodes,
   ReasonPhrases,
 } = require('http-status-codes');
-const { verifyToken } = require('../utils/jwt');
+const { VerifyToken } = require('#app/utils/jwt');
 
 async function validateJwt(req, res, next) {
   if (!req.headers.authorization) {
@@ -11,11 +11,11 @@ async function validateJwt(req, res, next) {
       .json({ message: ReasonPhrases.UNAUTHORIZED });
   }
 
-  const auth = await verifyToken(req.headers.authorization);
+  const auth = await VerifyToken(req.headers.authorization);
   if (!auth) {
     return res
       .status(StatusCodes.UNAUTHORIZED)
-      .json({ message: 'Invalid token' });
+      .json({ message: 'Unauthorized' });
   }
 
   req.auth = auth;

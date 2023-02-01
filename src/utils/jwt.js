@@ -1,28 +1,37 @@
-const jwt = require('jsonwebtoken');
+const jwt = require('async-jsonwebtoken');
 const log = require('../utils/logger');
 
-async function verifyToken(bearer) {
+async function VerifyToken(bearer) {
   const [ , token ] = bearer.split(' ');
-  let decoded = null;
 
-  if (token) {
-    try {
-      decoded = await jwt.verify(token, process.env.JWT_SECRET);
-    } catch (e) {
-      log.info(e.message);
-    }
+  const [decoded, err] = await jwt.verify(token, process.env.JWT_SECRET);
+  if (err) {
+    log.info(err);
+
+    return null;
   }
+
+  delete decoded.iat;
+  delete decoded.exp;
 
   return decoded;
 }
 
-async function signToken(payload) {
-  return jwt.sign(payload, process.env.JWT_SECRET, {
+async function SignToken(payload) {
+  const [token, err] = await jwt.sign(payload, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_TTL,
   });
+
+  if (err) {
+    log.info(err);
+
+    return null;
+  }
+
+  return token;
 }
 
 module.exports = {
-  verifyToken,
-  signToken,
+  VerifyToken,
+  SignToken,
 };

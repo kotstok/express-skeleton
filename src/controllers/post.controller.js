@@ -1,18 +1,22 @@
+const HttpStatus = require('http-status-codes');
+
 class PostController {
   async findPost(req, res) {
-    return 1;
+    res.json({});
   }
 
   async createPost(req, res) {
-    return 2;
+    res.status(HttpStatus.CREATED)
+      .json({});
   }
 
   async deletePost(req, res) {
-    return 3;
+    res.status(HttpStatus.NO_CONTENT)
+      .send();
   }
 
   async editPost(req, res) {
-    return 4;
+    res.json({});
   }
 }
 
