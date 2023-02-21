@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { param, body } from 'express-validator';
 
-import UserController from './user.controller';
+import UserController from '../controllers/user.controller';
 import { validateJwt } from '../middlewares/jwt.middleware';
 import ParamsValidator from '../middlewares/params-validator.middleware';
 

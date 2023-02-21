@@ -1,7 +1,8 @@
 version: "3.8"
 services:
   dev-db:
-    container_name: 'nestjs-dev-db'
+    container_name: 'dev-db'
+    restart: always
     image: postgres:${POSTGRES_VERSION}
     ports:
       - "${DB_PORT}:5432"
@@ -12,7 +13,7 @@ services:
     networks:
       - 'development'
   test-db:
-    container_name: 'nestjs-test-db'
+    container_name: 'test-db'
     image: postgres:${POSTGRES_VERSION}
     ports:
       - "${DB_PORT}:5432"

@@ -1,17 +1,14 @@
 import { matchedData } from 'express-validator';
 import HttpStatus from 'http-status-codes';
 
-import User from '../../models/user.model';
 import AccessDeniedError from '../errors/access-denied.error';
-import { HashPasswd } from '../utils/passwd';
 import { Response, NextFunction, AuthRequest } from 'express';
+import UserService from '../services/user.service';
+import { UserEditDto } from '../dto/user';
 
 class UserController {
   async findMe(req: AuthRequest, res: Response) {
-    const user = await User.findOne({
-      attributes: ['id', 'name', 'email', 'createdAt', 'updatedAt'],
-      where: req.auth,
-    });
+    const user = await UserService.findUserById(req.auth.id);
 
     res.json(user ? user : {});
   }
@@ -26,18 +23,18 @@ class UserController {
       return;
     }
 
-    const data = matchedData(req, {
-      includeOptionals: true,
+    const dto = <UserEditDto>matchedData(req, {
+      includeOptionals: false,
       locations: ['body'],
     });
 
-    if (data.passwd) {
-      data.passwd = await HashPasswd(data.passwd);
+    try {
+      await UserService.edit(req.auth.id, dto);
+
+      res.status(HttpStatus.NO_CONTENT).send();
+    } catch (e) {
+      next(e);
     }
-
-    await User.update(data, { where: { id: req.auth.id } });
-
-    res.status(HttpStatus.NO_CONTENT).send();
   }
 }
 
