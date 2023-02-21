@@ -1,8 +1,8 @@
 import { Router } from 'express';
 
-import PostRoute from './posts/post.route';
-import AuthRoute from './auth/auth.route';
-import UserRoute from './users/user.route';
+import PostRoute from './post.route';
+import AuthRoute from './auth.route';
+import UserRoute from './user.route';
 
 const AppRouter = Router();
 

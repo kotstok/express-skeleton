@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { param, body, query } from 'express-validator';
 
-import PostController from './post.controller';
+import PostController from '../controllers/post.controller';
 import ParamsValidator from '../middlewares/params-validator.middleware';
 import { validateJwt } from '../middlewares/jwt.middleware';
 
@@ -15,7 +15,11 @@ router.get(
 
     query('offset').optional().isInt().withMessage('Offset should be a number'),
 
-    query('limit').optional().isInt().withMessage('Limit should be a number'),
+    query('limit')
+      .optional()
+      .default(24)
+      .isInt()
+      .withMessage('Limit should be a number'),
   ],
   ParamsValidator,
   PostController.findPost,

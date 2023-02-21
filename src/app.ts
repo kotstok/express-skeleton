@@ -1,12 +1,13 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import bodyParser from 'body-parser';
 import compression from 'compression';
 import helmet from 'helmet';
 
-import AppRouter from './router';
+import AppRouter from './routes';
 import logger from './middlewares/morgan.middleware';
 import { errorHandler } from './middlewares/errors.middleware';
+import { RequestContext } from '@mikro-orm/core';
+import { DbConnect } from './utils/database';
 
 dotenv.config();
 
@@ -19,14 +20,21 @@ app.use(compression());
 app.use(helmet());
 
 app.use(express.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
 
-app.use(logger);
+export const init = async () => {
+  const orm = await DbConnect();
 
-// route handlers
-app.use(AppRouter);
+  await orm.isConnected();
 
-app.use(errorHandler);
+  app.use((req, res, next) => RequestContext.create(orm.em, next));
+
+  app.use(logger);
+
+  // route handlers
+  app.use(AppRouter);
+
+  app.use(errorHandler);
+};
 
 export default app;

@@ -1,17 +1,12 @@
-import app from './app';
+import app, { init } from './app';
 import logger from './utils/logger';
-import sequelize from './utils/database';
-import { IsTestEnv } from './utils/environment';
 
 const PORT = process.env.PORT || 3000;
 
 logger.info('Sync database...');
 
-sequelize
-  .sync({ force: IsTestEnv })
+init()
   .then(() => {
-    logger.info('The database has been successfully synchronized');
-
     app.listen(PORT, () => {
       logger.info(`API is listening on port ${PORT}`);
     });

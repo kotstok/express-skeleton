@@ -17,15 +17,7 @@
     "strictPropertyInitialization": false,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "rootDirs": ["src", "models"],
-    "paths": {
-      "#app/*": [
-        "src/*"
-      ],
-      "#models/*": [
-        "models/*"
-      ]
-    },
+    "rootDir": "src",
     "typeRoots": [
       "./@types",
       "./node_modules/@types"
